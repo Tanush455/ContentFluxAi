@@ -7,13 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Github, ArrowRight, Loader2 } from "lucide-react";
-import { signIn, signUp } from "@/lib/auth-client";
+import { signIn, signUp, emailOtp } from "@/lib/auth-client";
 
 export default function SignupForm() {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
-    const [message, setMessage] = useState<string>("");
+    const [message, setMessage] = useState("");
     const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; password?: string }>({});
 
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -26,7 +26,6 @@ export default function SignupForm() {
         const email = String(formData.get("email") ?? "");
         const password = String(formData.get("password") ?? "");
 
-        // Minimal client-side validation (optional)
         const errors: typeof fieldErrors = {};
         if (name.trim().length < 3) errors.name = "Name must be at least 3 characters";
         if (!email.includes("@")) errors.email = "Invalid email";
@@ -34,35 +33,33 @@ export default function SignupForm() {
         if (Object.keys(errors).length) return setFieldErrors(errors);
 
         startTransition(async () => {
-            const res = await signUp.email({
-                name,
-                email,
-                password,
-                // autoSignIn: true is default; you can set false if you want.
-            });
-
+            const res = await signUp.email({ name, email, password });
             if (res.error) {
                 setMessage(res.error.message || "Something went wrong. Please try again.");
                 return;
             }
 
-            router.push("/dashboard");
+            // Send email verification OTP and go verify page [web:133]
+            const send = await emailOtp.sendVerificationOtp({
+                email,
+                type: "email-verification",
+            });
+
+            if (send.error) {
+                setMessage(send.error.message || "Could not send OTP.");
+                return;
+            }
+
+            router.push(`/verify?type=email-verification&email=${encodeURIComponent(email)}`);
         });
     }
 
     async function onGitHub() {
-        // Redirect flow (OAuth)
-        await signIn.social({
-            provider: "github",
-            callbackURL: "http://localhost:3000/dashboard",
-        });
+        await signIn.social({ provider: "github", callbackURL: "http://localhost:3000/dashboard" });
     }
 
     async function onGoogle() {
-        await signIn.social({
-            provider: "google",
-            callbackURL: "http://localhost:3000/dashboard",
-        });
+        await signIn.social({ provider: "google", callbackURL: "http://localhost:3000/dashboard" });
     }
 
     return (

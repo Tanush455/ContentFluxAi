@@ -7,13 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Github, ArrowRight, Loader2 } from "lucide-react";
-import { signIn } from "@/lib/auth-client";
+import { signIn, emailOtp } from "@/lib/auth-client";
+import { api } from "@/lib/api";
 
 export default function LoginForm() {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
-
-    const [message, setMessage] = useState<string>("");
+    const [message, setMessage] = useState("");
 
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -24,13 +24,28 @@ export default function LoginForm() {
         const password = String(formData.get("password") ?? "");
 
         startTransition(async () => {
-            const res = await signIn.email({
-                email,
-                password,
-            });
-
+            const res = await signIn.email({ email, password });
             if (res.error) {
                 setMessage(res.error.message || "Invalid credentials.");
+                return;
+            }
+
+            // Check session to see if email is verified
+            const me = await api.get("/api/me").then((r) => r.data);
+
+            if (me?.user && me.user.emailVerified === false) {
+                // Send verification OTP and go to common verify page [web:133]
+                const send = await emailOtp.sendVerificationOtp({
+                    email,
+                    type: "email-verification",
+                });
+
+                if (send.error) {
+                    setMessage(send.error.message || "Could not send OTP.");
+                    return;
+                }
+
+                router.push(`/verify?type=email-verification&email=${encodeURIComponent(email)}`);
                 return;
             }
 
