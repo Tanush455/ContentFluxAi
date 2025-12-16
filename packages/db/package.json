@@ -1,0 +1,34 @@
+{
+  "name": "db",
+  "module": "index.ts",
+  "type": "module",
+  "exports": {
+    "./prisma": "./index.ts"
+  },
+  "scripts": {
+    "db:generate": "dotenv -e ../../.env -- prisma generate",
+    "db:push": "dotenv -e ../../.env -- prisma db push",
+    "db:migrate": "dotenv -e ../../.env -- prisma migrate dev",
+    "db:studio": "dotenv -e ../../.env -- prisma studio",
+    "db:reset": "dotenv -e ../../.env -- prisma migrate reset",
+    "db:auth:generate": "dotenv -e ../../.env -- bunx @better-auth/cli generate --config ../../apps/http-server/src/lib/auth.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/pg": "^8.16.0",
+    "prisma": "^7.1.0",
+    "@repo/typescript-config": "*"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.1.0",
+    "@prisma/client": "^7.1.0",
+    "@prisma/extension-accelerate": "^3.0.1",
+    "@types/dotenv": "^8.2.3",
+    "better-auth": "^1.4.6",
+    "dotenv": "^17.2.3",
+    "pg": "^8.16.3"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "@repo/http-server",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "dotenv -e ../../.env -- bun run src/index.ts"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "*",
+    "@types/bun": "latest",
+    "@types/pg": "^8.16.0",
+    "db": "*",
+    "pg": "^8.16.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "better-auth": "^1.4.6",
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "nodemon": "^3.1.11"
+  }
+}
