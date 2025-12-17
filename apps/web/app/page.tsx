@@ -9,7 +9,7 @@ import FooterContent from '@/components/Hero/FooterContent'
 export default function Home() {
     return (
 
-        <div className='min-h-screen relative bg-gradient-to-b from-white via-neutral-50 to-white'>
+        <div className='min-h-screen relative bg-gradient-to-b from-white via-neutral-50 to-white no-scrollbar'>
             <Navbar />
             <main className='w-full flex flex-col'>
                 <Hero />

@@ -57,6 +57,17 @@
   --animate-marquee: marquee 20s linear infinite;
 }
 
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
 /* Carousel */
 @keyframes marquee {
   0% {
@@ -221,5 +232,14 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
+  body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

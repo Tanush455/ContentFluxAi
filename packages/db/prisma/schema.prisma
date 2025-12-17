@@ -166,6 +166,7 @@ model Post {
   socialVariants SocialVariant[]
   analytics      Analytics[]
   scheduledJobs  ScheduledJob[]
+  media          Media[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -188,6 +189,22 @@ model PostVersion {
   content   Json
   createdBy String?
   createdAt DateTime @default(now())
+}
+
+model Media {
+  id     String  @id @default(uuid())
+  postId String?
+  post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  type      MediaType
+  url       String
+  provider  String // cloudinary, s3
+  createdAt DateTime  @default(now())
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
 }
 
 // ============================
