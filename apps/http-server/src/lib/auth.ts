@@ -20,9 +20,6 @@ export const auth = betterAuth({
 
     emailAndPassword: {
         enabled: true,
-        // Important: keep this OFF if you want "login then verify" flow.
-        // If true, signIn might be blocked until verified.
-        // requireEmailVerification: true,
     },
 
     socialProviders: {
@@ -40,7 +37,6 @@ export const auth = betterAuth({
         emailOTP({
             // Use OTP instead of link when verification is triggered
             overrideDefaultEmailVerification: true,
-
             // Keep false because frontend will send OTP explicitly (prevents double emails)
             sendVerificationOnSignUp: false,
 

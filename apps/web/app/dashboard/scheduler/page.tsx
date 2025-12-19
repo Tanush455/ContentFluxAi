@@ -1,6 +1,4 @@
-// app/scheduler/page.tsx
 "use client"
-
 import * as React from "react"
 import { useRouter } from "next/navigation"
 import { SchedulerHeader } from "@/components/scheduler/scheduler-header"

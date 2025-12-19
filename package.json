@@ -24,6 +24,7 @@
     "packages/*"
   ],
   "dependencies": {
+    "dev": "^0.1.3",
     "dotenv": "^17.2.3"
   }
 }
