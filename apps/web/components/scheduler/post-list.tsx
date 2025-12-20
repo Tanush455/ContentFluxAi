@@ -1,7 +1,6 @@
 import { PostItem } from "./post-item";
-import { EmptyState } from "./empty-state";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
+import EmptyState from "./empty-state";
 export function PostList() {
     // This would normally fetch data or receive props
     const posts = [

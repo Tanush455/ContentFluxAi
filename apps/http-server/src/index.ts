@@ -3,6 +3,7 @@ import cors from "cors";
 import { toNodeHandler } from "better-auth/node";
 import { fromNodeHeaders } from "better-auth/node";
 import { auth } from './lib/auth';
+import cookieParser from 'cookie-parser'
 
 const app = express();
 
@@ -19,8 +20,14 @@ app.all("/api/auth/*splat", toNodeHandler(auth));
 
 
 app.use(express.json());
+app.use(cookieParser())
+app.use(async (req, res, next) => {
 
-app.use((req, res, next) => {
+  const session = await auth.api.getSession({
+    headers: fromNodeHeaders(req.headers),
+  });
+  console.log(session);
+  console.log(req.cookies);
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
   console.log('Headers:', req.headers);
   console.log('Body:', req.body);
@@ -31,6 +38,7 @@ app.get("/api/me", async (req, res) => {
   const session = await auth.api.getSession({
     headers: fromNodeHeaders(req.headers),
   });
+
   return res.json(session);
 });
 

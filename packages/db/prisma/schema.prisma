@@ -15,6 +15,10 @@ datasource db {
 // BETTER AUTH MODELS (UNCHANGED)
 // ============================
 
+// ============================
+// PRISMA CONFIG
+// ============================
+
 model User {
   id            String   @id
   name          String
@@ -31,6 +35,9 @@ model User {
   tenantUsers TenantUser[]
   projects    Project[]    @relation("ProjectCreators")
   posts       Post[]       @relation("PostAuthors")
+
+  // FIX: This matches the "inviter" relation in the Invite model
+  sentInvites Invite[] @relation("UserInvites")
 
   @@unique([email])
   @@map("user")
@@ -100,6 +107,7 @@ model Tenant {
   projects       Project[]
   billing        Billing?
   socialAccounts SocialAccount[]
+  invites        Invite[]
 }
 
 model TenantUser {
@@ -119,6 +127,32 @@ enum TenantRole {
   ADMIN
   MEMBER
   BILLING_MANAGER
+}
+
+// ===========================
+// INVITE SYSTEM
+// ===========================
+
+model Invite {
+  id    String @id @default(uuid())
+  email String // The email of the person being invited
+  token String @unique // The secret key in the URL
+
+  // FIX: Renamed from workspaceId to tenantId for consistency
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // FIX: Relation to the User who sent the invite
+  inviterId String
+  inviter   User   @relation("UserInvites", fields: [inviterId], references: [id])
+
+  role TenantRole @default(MEMBER)
+
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  // Prevent duplicate invites for the same person to the same team
+  @@unique([email, tenantId])
 }
 
 // ============================
