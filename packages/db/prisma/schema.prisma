@@ -135,14 +135,12 @@ enum TenantRole {
 
 model Invite {
   id    String @id @default(uuid())
-  email String // The email of the person being invited
-  token String @unique // The secret key in the URL
+  email String
+  token String @unique
 
-  // FIX: Renamed from workspaceId to tenantId for consistency
   tenantId String
   tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-  // FIX: Relation to the User who sent the invite
   inviterId String
   inviter   User   @relation("UserInvites", fields: [inviterId], references: [id])
 
@@ -151,7 +149,6 @@ model Invite {
   expiresAt DateTime
   createdAt DateTime @default(now())
 
-  // Prevent duplicate invites for the same person to the same team
   @@unique([email, tenantId])
 }
 
@@ -232,7 +229,7 @@ model Media {
 
   type      MediaType
   url       String
-  provider  String // cloudinary, s3
+  provider  String
   createdAt DateTime  @default(now())
 }
 

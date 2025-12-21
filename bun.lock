@@ -18,6 +18,7 @@
     "apps/http-server": {
       "name": "@repo/http-server",
       "dependencies": {
+        "@sibevin/random-token": "^2.0.3",
         "@types/cookie-parser": "^1.4.10",
         "@types/cors": "^2.8.19",
         "@types/express": "^5.0.6",
@@ -461,6 +462,8 @@
     "@repo/http-server": ["@repo/http-server@workspace:apps/http-server"],
 
     "@repo/typescript-config": ["@repo/typescript-config@workspace:packages/typescript-config"],
+
+    "@sibevin/random-token": ["@sibevin/random-token@2.0.3", "", {}, "sha512-tw1wrnE3l6IJkZt2zXefqdr8sIJ+hXKU0InC6XJ8E1mB9SjnyRZmvChiUFgFcDfvMpJkkxaTLhMQp7QerlavbA=="],
 
     "@stablelib/base64": ["@stablelib/base64@1.0.1", "", {}, "sha512-1bnPQqSxSuc3Ii6MhBysoWCg58j97aUjuCSZrGSmDxNqtytIi0k8utUenAwTZN4V5mXXYGsVUI9zeBqy+jBOSQ=="],
 

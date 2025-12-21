@@ -1,14 +1,14 @@
-import express from 'express';
+import express, { Router } from 'express';
 import { createTenant, getMyWorkspaces } from '../controllers/tenant.controller';
-import { inviteMember, getTeamMembers } from '../controllers/team.controller'; // Assuming you separate team logic
+import { teamInvite, acceptInvite } from '../controllers/team.controller'; // Assuming you separate team logic
 
-export const tenantRouter = express.Router();
-export const teamRouter = express.Router();
+export const tenantRouter: Router = express.Router();
+export const teamRouter: Router = express.Router();
 
 // Workspace Routes
 tenantRouter.post('/create', createTenant);
 tenantRouter.get('/list', getMyWorkspaces);
 
 // Team Routes (Mounted separately or here)
-teamRouter.post('/invite', inviteMember);
-teamRouter.get('/list', getTeamMembers);
+teamRouter.post('/invite', teamInvite);
+teamRouter.get('/list', acceptInvite);
